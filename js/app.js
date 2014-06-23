@@ -11,10 +11,10 @@ myApp.config(['$routeProvider', function($routeProvider){
     templateUrl: 'views/lists.html',
     controller: 'ListCtrl'
   })
-  // .when('/add-user', {
-  //   templateUrl: 'views/add-new.html',
-  //   controller: 'AddCtrl'
-  // })
+  .when('/add-user', {
+    templateUrl: 'views/add-new.html',
+    controller: 'AddCtrl'
+  })
   //default route
   .otherwise('/', {
     redirectTo: '/'
@@ -28,7 +28,21 @@ myApp.config(['$routeProvider', function($routeProvider){
 //////////
 myApp.controller('ListCtrl', ['$scope', '$http' ,function ($scope, $http) {
 
-  $scope.loadData();
+
+  $http({
+      method: "GET",
+      url: 'users.php'
+    })
+    .success(function (data, status, headers, config){
+      $scope.yes = "load is success bro";
+      $scope.users = data;
+      console.log(data);
+      console.log($scope.yes);
+    })
+    .error(function (data, status, headers, config){
+      // something went wrong
+    });
+
   // get list of users as succes function
   // set $scope.data to data
 
@@ -82,9 +96,9 @@ myApp.controller('ListCtrl', ['$scope', '$http' ,function ($scope, $http) {
       $scope.loadData();
   };
 
-  $scope.delete_record = function(id){
+  $scope.delete_record = function(id, DeleteRecord){
     $http({
-      url: 'delete_user.php',
+      url: 'delete_record.php',
       method: "POST",
       headers: {'Content-Type': 'application/x-www-form-urlencoded'},
       data: $.param({id : id})
@@ -98,6 +112,15 @@ myApp.controller('ListCtrl', ['$scope', '$http' ,function ($scope, $http) {
     .error(function (data, status, headers, config){
       // something went wrong
     });
+
+     /// why need this???
+      $scope.reset = function(){
+        $scope.user = angular.copy($scope.master);
+      };
+
+      $scope.reset();
+
+      $scope.loadData();
   };
 
 

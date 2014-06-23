@@ -14,7 +14,7 @@
         <td>{{user.first_name}}</td>
         <td>{{user.last_name}}</td>
         <td>{{user.address}}</td>
-        <td><a class="btn btn-primary">delete {{user.id}}</a></td>
+        <td><a class="btn btn-primary" id="delete-record" ng-click="delete_record({{user.id}})">delete</a></td>
     </tbody>
   </table>
 <!-- <a class="btn btn-primary" href="#/add-user" ng-click="">Add New User</a> -->
