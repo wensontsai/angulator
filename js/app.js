@@ -11,10 +11,11 @@ myApp.config(['$routeProvider', function($routeProvider){
     templateUrl: 'views/lists.html',
     controller: 'ListCtrl'
   })
-  .when('/add-user', {
-    templateUrl: 'views/add-new.html',
-    controller: 'AddCtrl'
-  })
+  // .when('/add-user', {
+  //   templateUrl: 'views/add-new.html',
+  //   controller: 'AddCtrl'
+  // })
+
   //default route
   .otherwise('/', {
     redirectTo: '/'
@@ -80,6 +81,7 @@ myApp.controller('ListCtrl', ['$scope', '$http' ,function ($scope, $http) {
         $scope.reset();
         // $scope.activePath = $location.path('/');
         console.log(data);
+        $scope.loadData();
       })
       .error(function (data, status, headers, config){
         // something went wrong
@@ -93,12 +95,13 @@ myApp.controller('ListCtrl', ['$scope', '$http' ,function ($scope, $http) {
 
       $scope.reset();
 
-      $scope.loadData();
+
   };
 
-  $scope.delete_record = function(id, DeleteRecord){
+  $scope.delete_user = function(id){
+
     $http({
-      url: 'delete_record.php',
+      url: 'delete_user.php',
       method: "POST",
       headers: {'Content-Type': 'application/x-www-form-urlencoded'},
       data: $.param({id : id})
@@ -108,6 +111,8 @@ myApp.controller('ListCtrl', ['$scope', '$http' ,function ($scope, $http) {
       $scope.users = data;
       console.log(data);
       console.log($scope.yes);
+      console.log(id);
+      $scope.loadData();
     })
     .error(function (data, status, headers, config){
       // something went wrong
@@ -120,9 +125,40 @@ myApp.controller('ListCtrl', ['$scope', '$http' ,function ($scope, $http) {
 
       $scope.reset();
 
-      $scope.loadData();
   };
 
+
+}]);
+
+myApp.controller('DeleteCtrl', ['$scope', '$http', '$location',function ($scope, $http, $location) {
+    $scope.delete_user = function(id){
+
+      $http({
+        url: 'delete_user.php',
+        method: "POST",
+        headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+        data: $.param({id : id})
+      })
+      .success(function (data, status, headers, config){
+        $scope.yes = "delete is success bro";
+        $scope.users = data;
+        console.log(data);
+        console.log($scope.yes);
+        console.log(id);
+        $scope.loadData();
+      })
+      .error(function (data, status, headers, config){
+        // something went wrong
+      });
+
+       /// why need this???
+        $scope.reset = function(){
+          $scope.user = angular.copy($scope.master);
+        };
+
+        $scope.reset();
+
+    };
 
 }]);
 
